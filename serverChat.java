@@ -43,7 +43,7 @@ class NetworkThread implements Runnable {
 	ArrayList<Socket> connections; // Referencia a todas las conexiones activas
 
 	NetworkThread(Socket socket_in, Stack<Message> msgs_in, ArrayList<NetworkThread> threads_in,
-		ArrayList<Socket> connections_in) {
+			ArrayList<Socket> connections_in) {
 		t = new Thread(this);
 		socket = socket_in;
 		msgs = msgs_in;
@@ -61,8 +61,9 @@ class NetworkThread implements Runnable {
 	}
 
 	public void join() {
-		try {t.join();}
-		catch (InterruptedException e) {
+		try {
+			t.join();
+		} catch (InterruptedException e) {
 			System.out.println(e);
 		}
 	}
@@ -80,7 +81,7 @@ class NetworkThread implements Runnable {
 				String message = input.readLine(); // Se espera una línea enviada del cliente
 				if (message == null)
 					break; // Si es nula, se sale del bucle
-				msgToSend = socket.getPort() + " " + message;
+				msgToSend = socket.getInetAddress() + ":"+ socket.getPort() + " - " + message;
 				// Cuando se obtiene un mensaje se apila en el Stack de mensajes
 				msgs.push(new Message(socket.getInetAddress(), socket.getPort(), msgToSend));
 				System.out.println(msgToSend); // Se imprime el mensaje del cliente
@@ -104,7 +105,6 @@ class NetworkThread implements Runnable {
 		}
 	}
 }
-
 
 // Hilo que se usa para gestionar las notificaciones
 class NotifyThread implements Runnable {
